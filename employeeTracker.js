@@ -2,51 +2,157 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
 
-// create the connection information for the sql database
-var connection = mysql.createConnection({
-  host: "localhost",
-
-  // Your port; if not 3306
-  port: 3306,
-
-  // Your username
-  user: "root",
-
-  // Your password
-  password: "password",
-  database: "employee_DB",
+// const questions = [
+//   {
+//     type: "confirm",
+//     message: "Add department,role, or employee?",
+//     name: "add",
+//   },
+//   {
+//     type: "confirm",
+//     message: "View departments, roles, or employees?",
+//     name: "view",
+//   },
+//   {
+//     type: "confirm",
+//     message: "Would you like to modify an employee?",
+//     name: "update",
+//   }],
+//......................possible required terminal selector............
+class Select {
+	downArrow() {
+		let y = this.cursorLocs.y;
+		rdl.cursorTo(stdout, 0, y);
+		stdout.write(this.options[y - 1]);
+		if (this.cursorLocs.y === this.options.length) {
+			this.cursorLocs.y = 1;
+		} else {
+			this.cursorLocs.y++;
+		}
+		y = this.cursorLocs.y;
+		rdl.cursorTo(stdout, 0, y);
+		stdout.write(this.color(this.options[y - 1], this._color));
+		this.input = y - 1;
+	}
+	upArrow() {
+		let y = this.cursorLocs.y;
+		rdl.cursorTo(stdout, 0, y);
+		stdout.write(this.options[y - 1]);
+		if (this.cursorLocs.y === 1) {
+			this.cursorLocs.y = this.options.length;
+		} else {
+			this.cursorLocs.y--;
+		}
+		y = this.cursorLocs.y;
+		rdl.cursorTo(stdout, 0, y);
+		stdout.write(this.color(this.options[y - 1], this._color));
+		this.input = y - 1;
+	}
+}
+const questions = new Select({
+	question: "Which of these is your fav JS framework?",
+	options: ["Department", "React", "Vue", "Svelte"],
+	answers: ["Department", "react", "vue", "svelte"],
+	pointer: ">",
+	color: "magenta",
 });
-
-// connect to the mysql server and sql database
-connection.connect(function (err) {
-  if (err) throw err;
-  // run the start function after the connection is made to prompt the user
-  department();
-});
+questions.start();
+//...............................end of terminal selector........
 
 // function which prompts the user for what action they should take
 function department() {
-  inquirer
-    .prompt({
-      name: "department",
-      type: "input",
-      message: "What is your department name?",
-    })
-    .then(function (answer) {
-      // when finished prompting, insert a new item into the db with that info
-      connection.query(
-        "INSERT INTO department SET ?",
-        {
-          name: answer.department,
-        },
-        function (err) {
-          if (err) throw err;
-          // console.table();
-        }
-      );
-    });
+	inquirer
+		.prompt({
+			name: "name",
+			type: "input",
+			message: "What is your department name?",
+		})
+		.then(function (answer) {
+			// when finished prompting, insert a new item into the db with that info
+			connection.query(
+				"INSERT INTO department SET ?",
+				{
+					name: answer.department,
+				},
+				function (err) {
+					if (err) throw err;
+					// console.table();
+				}
+			);
+		});
 }
 
+function role() {
+	inquirer
+		.prompt(
+			{
+				name: "title",
+				type: "input",
+				message: "What is your role title?",
+			},
+			{
+				name: "salary",
+				type: "input",
+				message: "What is your current salary",
+			},
+			{
+				name: "department_id",
+				type: "input",
+				message: "What is your department ID?",
+			}
+		)
+		.then(function (answer) {
+			// when finished prompting, insert a new item into the db with that info
+			connection.query(
+				"INSERT INTO role SET ?",
+				{
+					name: answer.role,
+				},
+				function (err) {
+					if (err) throw err;
+					// console.table();
+				}
+			);
+		});
+}
+function employee() {
+	inquirer
+		.prompt(
+			{
+				name: "first_name",
+				type: "input",
+				message: "What is your first name?",
+			},
+			{
+				name: "last_name",
+				type: "input",
+				message: "What is your last name?",
+			},
+			{
+				name: "role_id",
+				type: "input",
+				message: "What is your role id?",
+			},
+			{
+				name: "manager_id",
+				type: "input",
+				message: "What is your manager id?",
+			}
+		)
+		.then(function (answer) {
+			// when finished prompting, insert a new item into the db with that info
+			connection.query(
+				"INSERT INTO employee SET ?",
+				{
+					name: answer.employee,
+				},
+				function (err) {
+					if (err) throw err;
+					// console.table();
+				}
+			);
+		});
+}
 // // function to handle posting new items up for auction
 // function postAuction() {
 //   // prompt for info about the item being put up for auction

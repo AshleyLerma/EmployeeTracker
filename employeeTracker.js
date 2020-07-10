@@ -33,9 +33,17 @@ function department() {
       message: "What is your department name?",
     })
     .then(function (answer) {
-      console.table(answer);
-      connection.end();
-      // }
+      // when finished prompting, insert a new item into the db with that info
+      connection.query(
+        "INSERT INTO department SET ?",
+        {
+          name: answer.department,
+        },
+        function (err) {
+          if (err) throw err;
+          // console.table();
+        }
+      );
     });
 }
 
@@ -66,24 +74,24 @@ function department() {
 //         },
 //       },
 //     ])
-//     .then(function (answer) {
-//       // when finished prompting, insert a new item into the db with that info
-//       connection.query(
-//         "INSERT INTO auctions SET ?",
-//         {
-//           item_name: answer.item,
-//           category: answer.category,
-//           starting_bid: answer.startingBid || 0,
-//           highest_bid: answer.startingBid || 0,
-//         },
-//         function (err) {
-//           if (err) throw err;
-//           console.log("Your auction was created successfully!");
-//           // re-prompt the user for if they want to bid or post
-//           start();
-//         }
-//       );
-//     });
+// .then(function (answer) {
+//   // when finished prompting, insert a new item into the db with that info
+//   connection.query(
+//     "INSERT INTO auctions SET ?",
+//     {
+//       item_name: answer.item,
+//       category: answer.category,
+//       starting_bid: answer.startingBid || 0,
+//       highest_bid: answer.startingBid || 0,
+//     },
+//     function (err) {
+//       if (err) throw err;
+//       console.log("Your auction was created successfully!");
+//       // re-prompt the user for if they want to bid or post
+//       start();
+//     }
+//   );
+// });
 // }
 
 // function bidAuction() {

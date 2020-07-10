@@ -2,63 +2,22 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
 
-// const questions = [
-//   {
-//     type: "confirm",
-//     message: "Add department,role, or employee?",
-//     name: "add",
-//   },
-//   {
-//     type: "confirm",
-//     message: "View departments, roles, or employees?",
-//     name: "view",
-//   },
-//   {
-//     type: "confirm",
-//     message: "Would you like to modify an employee?",
-//     name: "update",
-//   }],
-//......................possible required terminal selector............
-class Select {
-	downArrow() {
-		let y = this.cursorLocs.y;
-		rdl.cursorTo(stdout, 0, y);
-		stdout.write(this.options[y - 1]);
-		if (this.cursorLocs.y === this.options.length) {
-			this.cursorLocs.y = 1;
-		} else {
-			this.cursorLocs.y++;
-		}
-		y = this.cursorLocs.y;
-		rdl.cursorTo(stdout, 0, y);
-		stdout.write(this.color(this.options[y - 1], this._color));
-		this.input = y - 1;
-	}
-	upArrow() {
-		let y = this.cursorLocs.y;
-		rdl.cursorTo(stdout, 0, y);
-		stdout.write(this.options[y - 1]);
-		if (this.cursorLocs.y === 1) {
-			this.cursorLocs.y = this.options.length;
-		} else {
-			this.cursorLocs.y--;
-		}
-		y = this.cursorLocs.y;
-		rdl.cursorTo(stdout, 0, y);
-		stdout.write(this.color(this.options[y - 1], this._color));
-		this.input = y - 1;
-	}
-}
-const questions = new Select({
-	question: "Which of these is your fav JS framework?",
-	options: ["Department", "React", "Vue", "Svelte"],
-	answers: ["Department", "react", "vue", "svelte"],
-	pointer: ">",
-	color: "magenta",
-});
-questions.start();
-//...............................end of terminal selector........
-
+const questions = [
+  {
+    type: "confirm",
+    message: "Add department,role, or employee?",
+    name: "add",
+  },
+  {
+    type: "confirm",
+    message: "View departments, roles, or employees?",
+    name: "view",
+  },
+  {
+    type: "confirm",
+    message: "Would you like to modify an employee?",
+    name: "update",
+  }],
 // function which prompts the user for what action they should take
 function department() {
 	inquirer

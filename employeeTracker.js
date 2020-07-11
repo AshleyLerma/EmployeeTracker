@@ -1,31 +1,74 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
-
 const questions = [
-  {
-    type: "confirm",
-    message: "Add department,role, or employee?",
-    name: "add",
-  },
-  {
-    type: "confirm",
-    message: "View departments, roles, or employees?",
-    name: "view",
-  },
-  {
-    type: "confirm",
-    message: "Would you like to modify an employee?",
-    name: "update",
-  }],
+	// {
+	// 	type: "confirm",
+	// 	message: "View departments, roles, or employees?",
+	// 	name: "view",
+	// },
+	{
+		type: "list",
+		name: "firstChoice",
+		message: "What would you like to do?",
+		choices: ["ADD", "VIEW", "UPDATE"],
+	},
+];
+const questions2 = [
+	// "what do you want to touch?"
+	{
+		type: "list",
+		name: "secondChoice",
+		message: "What would you like to do?",
+		choices: ["employee", "role", "department"],
+	},
+];
+// const addQuestions = [];
+// const addQuestions = [];
+function init() {
+	inquirer.prompt(questions).then((response) => {
+		console.log(response);
+		inquirer.prompt(questions2).then((response2) => {
+			console.log(response2);
+			switch (response2.secondChoice) {
+				case "employee":
+					employee();
+					break;
+				case "role":
+					role();
+					break;
+				case "department":
+					department();
+					break;
+				default:
+				// code block
+			}
+		});
+	});
+}
+init();
+// console.table();
+// ,
+//   {
+//     type: "confirm",
+//     message: "View departments, roles, or employees?",
+//     name: "view",
+//   },
+//   {
+//     type: "confirm",
+//     message: "Would you like to modify an employee?",
+//     name: "update",
+//   }],
 // function which prompts the user for what action they should take
 function department() {
 	inquirer
-		.prompt({
-			name: "name",
-			type: "input",
-			message: "What is your department name?",
-		})
+		.prompt([
+			{
+				name: "name",
+				type: "input",
+				message: "What is your department name?",
+			},
+		])
 		.then(function (answer) {
 			// when finished prompting, insert a new item into the db with that info
 			connection.query(
@@ -43,7 +86,7 @@ function department() {
 
 function role() {
 	inquirer
-		.prompt(
+		.prompt([
 			{
 				name: "title",
 				type: "input",
@@ -58,8 +101,8 @@ function role() {
 				name: "department_id",
 				type: "input",
 				message: "What is your department ID?",
-			}
-		)
+			},
+		])
 		.then(function (answer) {
 			// when finished prompting, insert a new item into the db with that info
 			connection.query(
@@ -76,7 +119,7 @@ function role() {
 }
 function employee() {
 	inquirer
-		.prompt(
+		.prompt([
 			{
 				name: "first_name",
 				type: "input",
@@ -96,14 +139,14 @@ function employee() {
 				name: "manager_id",
 				type: "input",
 				message: "What is your manager id?",
-			}
-		)
-		.then(function (answer) {
+			},
+		])
+		.then(function (response2) {
 			// when finished prompting, insert a new item into the db with that info
 			connection.query(
 				"INSERT INTO employee SET ?",
 				{
-					name: answer.employee,
+					name: response2.employee,
 				},
 				function (err) {
 					if (err) throw err;
@@ -113,7 +156,7 @@ function employee() {
 		});
 }
 // // function to handle posting new items up for auction
-// function postAuction() {
+// function something() {
 //   // prompt for info about the item being put up for auction
 //   inquirer
 //     .prompt([
@@ -168,7 +211,7 @@ function employee() {
 //       .prompt([
 //         {
 //           name: "choice",
-//           type: "rawlist",
+//           type: "raw?list",
 //           choices: function () {
 //             var choiceArray = [];
 //             for (var i = 0; i < results.length; i++) {

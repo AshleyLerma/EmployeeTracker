@@ -2,11 +2,6 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
 const questions = [
-	// {
-	// 	type: "confirm",
-	// 	message: "View departments, roles, or employees?",
-	// 	name: "view",
-	// },
 	{
 		type: "list",
 		name: "firstChoice",
@@ -14,23 +9,37 @@ const questions = [
 		choices: ["ADD", "VIEW", "UPDATE"],
 	},
 ];
-const questions2 = [
-	// "what do you want to touch?"
+const addQuestions = [
 	{
 		type: "list",
-		name: "secondChoice",
+		name: "addChoice",
 		message: "What would you like to do?",
 		choices: ["employee", "role", "department"],
 	},
 ];
-// const addQuestions = [];
-// const addQuestions = [];
+const viewQuestions = [
+	{
+		type: "list",
+		name: "viewChoice",
+		message: "What would you like to view?",
+		choices: ["employee", "role", "department"],
+	},
+];
+const updateQuestions = [
+	{
+		type: "list",
+		name: "updateChoice",
+		message: "What role would you like to update?",
+		choices: ["employee", "role", "department"],
+	},
+];
+// if response is addChoice run through function to add based on what they choose
 function init() {
 	inquirer.prompt(questions).then((response) => {
 		console.log(response);
-		inquirer.prompt(questions2).then((response2) => {
+		inquirer.prompt(addQuestions).then((response2) => {
 			console.log(response2);
-			switch (response2.secondChoice) {
+			switch (response2.addChoice) {
 				case "employee":
 					employee();
 					break;
@@ -47,34 +56,38 @@ function init() {
 	});
 }
 init();
-// console.table();
-// ,
-//   {
-//     type: "confirm",
-//     message: "View departments, roles, or employees?",
-//     name: "view",
-//   },
-//   {
-//     type: "confirm",
-//     message: "Would you like to modify an employee?",
-//     name: "update",
-//   }],
-// function which prompts the user for what action they should take
-function department() {
+// addChoice functions questions based on what they want to add
+
+function employee() {
 	inquirer
 		.prompt([
 			{
-				name: "name",
+				name: "first_name",
 				type: "input",
-				message: "What is your department name?",
+				message: "What is your first name?",
+			},
+			{
+				name: "last_name",
+				type: "input",
+				message: "What is your last name?",
+			},
+			{
+				name: "role_id",
+				type: "input",
+				message: "What is your role id?",
+			},
+			{
+				name: "manager_id",
+				type: "input",
+				message: "What is your manager id?",
 			},
 		])
-		.then(function (answer) {
+		.then(function (response2) {
 			// when finished prompting, insert a new item into the db with that info
 			connection.query(
-				"INSERT INTO department SET ?",
+				"INSERT INTO employee SET ?",
 				{
-					name: answer.department,
+					name: response2.employee,
 				},
 				function (err) {
 					if (err) throw err;
@@ -83,7 +96,6 @@ function department() {
 			);
 		});
 }
-
 function role() {
 	inquirer
 		.prompt([
@@ -117,36 +129,21 @@ function role() {
 			);
 		});
 }
-function employee() {
+function department() {
 	inquirer
 		.prompt([
 			{
-				name: "first_name",
+				name: "name",
 				type: "input",
-				message: "What is your first name?",
-			},
-			{
-				name: "last_name",
-				type: "input",
-				message: "What is your last name?",
-			},
-			{
-				name: "role_id",
-				type: "input",
-				message: "What is your role id?",
-			},
-			{
-				name: "manager_id",
-				type: "input",
-				message: "What is your manager id?",
+				message: "What is your department name?",
 			},
 		])
-		.then(function (response2) {
+		.then(function (answer) {
 			// when finished prompting, insert a new item into the db with that info
 			connection.query(
-				"INSERT INTO employee SET ?",
+				"INSERT INTO department SET ?",
 				{
-					name: response2.employee,
+					name: answer.department,
 				},
 				function (err) {
 					if (err) throw err;

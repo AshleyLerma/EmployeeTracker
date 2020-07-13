@@ -168,13 +168,31 @@ function department() {
           if (err) throw err;
         }
       );
+      // viewDepartment();
       init();
     });
 }
 
-// function viewDepartment() {
-//   connection.query("select * from department", function (error, data) {
-//     console.table(data);
-//     init();
-//   });
-// }
+function viewDepartment() {
+  connection.query("select * from department", function (err, data) {
+    if (err) throw err;
+    console.table(data);
+    // init();
+  });
+}
+
+function viewRole() {
+  connection.query("select * from role", function (err, data) {
+    if (err) throw err;
+    console.table(data);
+    // init();
+  });
+}
+
+function viewEmployees() {
+  connection.query("select * from employee", function (err, data) {
+    if (err) throw err;
+    console.table(data);
+    // init();
+  });
+}

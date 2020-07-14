@@ -47,6 +47,7 @@ const updateQuestions = [
 // connect to the mysql server and sql database
 connection.connect(function (err) {
   if (err) throw err;
+  console.log("\n WELCOME TO EMPLOYEE TRACKER \n");
   // run the start function after the connection is made to prompt the user
   init();
 });

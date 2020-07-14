@@ -1,6 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
+let deptArr = [];
+let roleArr = [];
+let emplArr = [];
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -75,12 +78,52 @@ function init() {
         viewDepartment();
         break;
       case "Update An Employee":
-        console.log("TBD");
+        getDepts();
+        getRoles();
+        getEmployees();
         break;
       default:
         connection.end();
     }
   });
+}
+
+// get all Departments
+function getDepts() {
+  connection.query(`SELECT department_name FROM department`, function (
+    err,
+    departments
+  ) {
+    if (err) throw err;
+    for (i = 0; i < departments.length; i++) {
+      deptArr.push(departments[i].department_name);
+    }
+    console.log(deptArr);
+  });
+}
+
+// get all Roles
+function getRoles() {
+  connection.query(`SELECT title FROM role`, function (err, roles) {
+    if (err) throw err;
+    for (i = 0; i < roles.length; i++) {
+      roleArr.push(roles[i].title);
+    }
+    console.log(roleArr);
+  });
+}
+
+function getEmployees() {
+  connection.query(
+    `SELECT concat(employee.first_name, ' ' ,  employee.last_name) AS Name FROM employee`,
+    function (err, employees) {
+      if (err) throw err;
+      for (i = 0; i < employees.length; i++) {
+        emplArr.push(employees[i]);
+      }
+      console.log(emplArr);
+    }
+  );
 }
 
 // Add Employee

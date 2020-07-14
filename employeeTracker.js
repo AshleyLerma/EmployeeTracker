@@ -76,6 +76,8 @@ function init() {
       case "Update An Employee":
         console.log("TBD");
         break;
+      default:
+        connection.end();
     }
   });
 }
@@ -185,33 +187,45 @@ function department() {
 }
 // View all employees by department
 function viewDepartment() {
-  connection.query("select * from department", function (err, data) {
-    if (err) throw err;
-    console.table(data);
-    // init();
-  });
+  connection.query(
+    ` \n SELECT employee.employee_id, employee.first_name, employee.last_name, department.department_name FROM employee 
+  LEFT JOIN role ON employee.role_id = role.role_id
+  LEFT JOIN department ON role.department_id = department.department_id 
+  ORDER BY department.department_name \n `,
+    function (err, data) {
+      if (err) throw err;
+      console.table(data);
+      init();
+    }
+  );
 }
 // View all employees by role
 function viewRole() {
-  connection.query("select * from role", function (err, data) {
-    if (err) throw err;
-    console.table(data);
-    // init();
-  });
+  connection.query(
+    ` \n SELECT employee.employee_id, employee.first_name, employee.last_name, role.title, role.salary, department.department_name FROM employee 
+    LEFT JOIN role ON employee.role_id = role.role_id
+    LEFT JOIN department ON role.department_id = department.department_id 
+    ORDER BY role.title \n `,
+    function (err, data) {
+      if (err) throw err;
+      console.table(data);
+      init();
+    }
+  );
 }
 // View all employees
 function viewEmployees() {
   connection.query(
-    ` SELECT employee.employee_id, employee.first_name, employee.last_name, role.title,
-  department.name AS department,role.salary,CONCAT(a.first_name, " ", a.last_name) AS manager
+    ` \n SELECT employee.employee_id, employee.first_name, employee.last_name, role.title,
+  department.department_name AS department,role.salary,CONCAT(a.first_name, " ", a.last_name) AS manager
   FROM employee
   LEFT JOIN role ON employee.role_id = role.role_id
   LEFT JOIN department ON role.department_id = department.department_id
-  LEFT JOIN employee a ON a.employee_id = employee.manager_id `,
+  LEFT JOIN employee a ON a.employee_id = employee.manager_id \n `,
     function (err, data) {
       if (err) throw err;
       console.table(data);
+      init();
     }
   );
-  init();
 }

@@ -26,10 +26,10 @@ const mainMenu = [
       "Add Employee",
       "Add Role",
       "Add Department",
-      "View Employees",
-      "View Roles",
-      "View Departments",
-      "Update Employees",
+      "View All Employees",
+      "View All Employees By Role",
+      "View All Employees By Department",
+      "Update An Employee",
     ],
   },
 ];
@@ -64,23 +64,23 @@ function init() {
       case "Add Department":
         department();
         break;
-      case "View Employees":
+      case "View All Employees":
         viewEmployees();
         break;
-      case "View Roles":
+      case "View All Employees By Role":
         viewRole();
         break;
-      case "View Departments":
+      case "View All Employees By Department":
         viewDepartment();
         break;
-      case "Update Employee":
-        console.log("todo");
+      case "Update An Employee":
+        console.log("TBD");
         break;
     }
   });
 }
-// addChoice functions questions based on what they want to add
 
+// Add Employee
 function employee() {
   inquirer
     .prompt([
@@ -122,7 +122,7 @@ function employee() {
       init();
     });
 }
-
+// Add Role
 function role() {
   inquirer
     .prompt([
@@ -159,7 +159,7 @@ function role() {
       init();
     });
 }
-
+// Add Department
 function department() {
   inquirer
     .prompt([
@@ -180,11 +180,10 @@ function department() {
           if (err) throw err;
         }
       );
-      // viewDepartment();
       init();
     });
 }
-
+// View all employees by department
 function viewDepartment() {
   connection.query("select * from department", function (err, data) {
     if (err) throw err;
@@ -192,7 +191,7 @@ function viewDepartment() {
     // init();
   });
 }
-
+// View all employees by role
 function viewRole() {
   connection.query("select * from role", function (err, data) {
     if (err) throw err;
@@ -200,12 +199,19 @@ function viewRole() {
     // init();
   });
 }
-
-// TODO: Make join to show all 3 table information combined
+// View all employees
 function viewEmployees() {
-  connection.query("select * from employee", function (err, data) {
-    if (err) throw err;
-    console.table(data);
-    // init();
-  });
+  connection.query(
+    ` SELECT employee.employee_id, employee.first_name, employee.last_name, role.title,
+  department.name AS department,role.salary,CONCAT(a.first_name, " ", a.last_name) AS manager
+  FROM employee
+  LEFT JOIN role ON employee.role_id = role.role_id
+  LEFT JOIN department ON role.department_id = department.department_id
+  LEFT JOIN employee a ON a.employee_id = employee.manager_id `,
+    function (err, data) {
+      if (err) throw err;
+      console.table(data);
+    }
+  );
+  init();
 }

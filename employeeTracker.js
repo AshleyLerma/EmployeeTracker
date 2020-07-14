@@ -20,7 +20,7 @@ var connection = mysql.createConnection({
 const mainMenu = [
   {
     type: "list",
-    name: "selection",
+    name: "firstChoice",
     message: "What would you like to do?",
     choices: [
       "Add Employee",
@@ -54,7 +54,7 @@ connection.connect(function (err) {
 // Offer main menu then prompt next function based on response
 function init() {
   inquirer.prompt(mainMenu).then((response) => {
-    switch (response.selection) {
+    switch (response.firstChoice) {
       case "Add Employee":
         employee();
         break;
@@ -201,9 +201,17 @@ function viewRole() {
 }
 // View all employees
 function viewEmployees() {
-  connection.query("select * from employee", function (err, data) {
-    if (err) throw err;
-    console.table(data);
-    // init();
-  });
+  connection.query(
+    `SELECT employee.employee_id, employee.first_name, employee.last_name, role.title,
+  department.name AS department,role.salary,CONCAT(a.first_name, " ", a.last_name) AS manager
+  FROM employee
+  LEFT JOIN role ON employee.role_id = role.role_id
+  LEFT JOIN department ON role.department_id = department.department_id
+  LEFT JOIN employee a ON a.employee_id = employee.manager_id`,
+    function (err, data) {
+      if (err) throw err;
+      console.table(data);
+      // init();
+    }
+  );
 }

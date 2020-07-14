@@ -33,6 +33,7 @@ const mainMenu = [
       "View All Employees By Role",
       "View All Employees By Department",
       "Update An Employee",
+      "Exit",
     ],
   },
 ];
@@ -69,6 +70,9 @@ function init() {
         break;
       case "Update An Employee":
         updateEmployee();
+        break;
+      case "Exit":
+        connection.end();
         break;
       default:
         connection.end();

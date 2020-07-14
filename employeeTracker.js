@@ -37,16 +37,6 @@ const mainMenu = [
   },
 ];
 
-const updateQuestions = [
-  {
-    type: "list",
-    name: "updateEmployee",
-    message: "Which employee would you like to update?",
-    // TODO: Pull full employee list from SQL
-    choices: emplArr,
-  },
-];
-
 // connect to the mysql server and sql database
 connection.connect(function (err) {
   if (err) throw err;
@@ -78,12 +68,13 @@ function init() {
         viewDepartment();
         break;
       case "Update An Employee":
-        console.log("tbd");
+        updateEmployee();
         break;
       default:
         connection.end();
     }
   });
+  // update arrays each time the init function is called
   getDepts();
   getRoles();
   getEmployees();
@@ -96,6 +87,7 @@ function getDepts() {
     departments
   ) {
     if (err) throw err;
+    deptArr = [];
     for (i = 0; i < departments.length; i++) {
       deptArr.push(departments[i].department_name);
     }
@@ -107,6 +99,7 @@ function getDepts() {
 function getRoles() {
   connection.query(`SELECT title FROM role`, function (err, roles) {
     if (err) throw err;
+    roleArr = [];
     for (i = 0; i < roles.length; i++) {
       roleArr.push(roles[i].title);
     }
@@ -119,6 +112,7 @@ function getEmployees() {
     `SELECT concat(employee.first_name, ' ' ,  employee.last_name) AS Name FROM employee`,
     function (err, employees) {
       if (err) throw err;
+      emplArr = [];
       for (i = 0; i < employees.length; i++) {
         emplArr.push(employees[i].Name);
       }
@@ -143,13 +137,15 @@ function employee() {
       },
       {
         name: "role_id",
-        type: "input",
-        message: "What is your role id?",
+        type: "list",
+        message: "What is the employee's role?",
+        choices: roleArr,
       },
       {
         name: "manager_id",
-        type: "input",
-        message: "What is your manager id?",
+        type: "list",
+        message: "Who is this employee's Manager?",
+        choices: emplArr,
       },
     ])
     .then(function (answer) {
@@ -273,4 +269,29 @@ function viewEmployees() {
       init();
     }
   );
+}
+function updateEmployee() {
+  inquirer.prompt([
+    {
+      name: "employeeChoice",
+      type: "list",
+      choices: emplArr,
+    },
+  ]);
+  // .then(function (answer) {
+  //   // when finished prompting, insert a new item into the db with that info
+  //   connection.query(
+  //     "INSERT INTO employee SET ?",
+  //     {
+  //       first_name: answer.first_name,
+  //       last_name: answer.last_name,
+  //       role_id: answer.role_id,
+  //       manager_id: answer.manager_id,
+  //     },
+  //     function (err) {
+  //       if (err) throw err;
+  //     }
+  //   );
+  //   init();
+  // });
 }

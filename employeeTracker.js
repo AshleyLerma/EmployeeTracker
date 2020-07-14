@@ -1,7 +1,23 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
-const questions = [
+
+// create the connection information for the sql database
+var connection = mysql.createConnection({
+  host: "localhost",
+
+  // Your port; if not 3306
+  port: 3306,
+
+  // Your username
+  user: "root",
+
+  // Your password
+  password: "password",
+  database: "employee_DB",
+});
+
+const mainMenu = [
   {
     type: "list",
     name: "firstChoice",
@@ -28,28 +44,22 @@ const viewQuestions = [
 const updateQuestions = [
   {
     type: "list",
-    name: "updateChoice",
-    message: "What role would you like to update?",
-    choices: ["employee", "role", "department"],
+    name: "updateEmployee",
+    message: "Which employee would you like to update?",
+    // TODO: Pull full employee list from SQL
+    choices: [],
   },
 ];
-// connect to mySQL and begin init function upon connection
-const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "employee_DB",
-});
 
-connection.connect((err) => {
+// connect to the mysql server and sql database
+connection.connect(function (err) {
   if (err) throw err;
-  console.log("mysql connection successful");
-  init();
+  // run the start function after the connection is made to prompt the user
 });
 
 // if response is addChoice run through function to add based on what they choose
 function init() {
-  inquirer.prompt(questions).then((response) => {
+  inquirer.prompt(mainMenu).then((response) => {
     // console.log(response);
     inquirer.prompt(addQuestions).then((response2) => {
       // console.log(response2);
@@ -189,6 +199,7 @@ function viewRole() {
   });
 }
 
+// TODO: Make join to show all 3 table information combined
 function viewEmployees() {
   connection.query("select * from employee", function (err, data) {
     if (err) throw err;

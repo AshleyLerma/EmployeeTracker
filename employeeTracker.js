@@ -270,28 +270,30 @@ function viewEmployees() {
     }
   );
 }
-function updateEmployee() {
-  inquirer.prompt([
-    {
-      name: "employeeChoice",
-      type: "list",
-      choices: emplArr,
-    },
-  ]);
-  // .then(function (answer) {
-  //   // when finished prompting, insert a new item into the db with that info
-  //   connection.query(
-  //     "INSERT INTO employee SET ?",
-  //     {
-  //       first_name: answer.first_name,
-  //       last_name: answer.last_name,
-  //       role_id: answer.role_id,
-  //       manager_id: answer.manager_id,
-  //     },
-  //     function (err) {
-  //       if (err) throw err;
-  //     }
-  //   );
-  //   init();
-  // });
-}
+// function updateEmployee() {
+//   inquirer
+//     .prompt([
+//       {
+//         name: "employeeChoice",
+//         type: "list",
+//         message: "Which employee would you like to update?",
+//         choices: emplArr,
+//       },
+//     ])
+//     .then(function (answer) {
+//       // when finished prompting, insert a new item into the db with that info
+//       connection.query(
+//         "INSERT INTO employee SET ?",
+//         {
+//           first_name: answer.first_name,
+//           last_name: answer.last_name,
+//           role_id: answer.role_id,
+//           manager_id: answer.manager_id,
+//         },
+//         function (err) {
+//           if (err) throw err;
+//         }
+//       );
+//       init();
+//     });
+// }

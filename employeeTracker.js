@@ -1,72 +1,82 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
-const questions = [
-  {
-    type: "list",
-    name: "firstChoice",
-    message: "What would you like to do?",
-    choices: ["ADD", "VIEW", "UPDATE"],
-  },
-];
-const addQuestions = [
-  {
-    type: "list",
-    name: "addChoice",
-    message: "What would you like to do?",
-    choices: ["employee", "role", "department"],
-  },
-];
-const viewQuestions = [
-  {
-    type: "list",
-    name: "viewChoice",
-    message: "What would you like to view?",
-    choices: ["employee", "role", "department"],
-  },
-];
-const updateQuestions = [
-  {
-    type: "list",
-    name: "updateChoice",
-    message: "What role would you like to update?",
-    choices: ["employee", "role", "department"],
-  },
-];
-// connect to mySQL and begin init function upon connection
-const connection = mysql.createConnection({
+
+// create the connection information for the sql database
+var connection = mysql.createConnection({
   host: "localhost",
+
+  // Your port; if not 3306
+  port: 3306,
+
+  // Your username
   user: "root",
+
+  // Your password
   password: "password",
   database: "employee_DB",
 });
 
-connection.connect((err) => {
+const mainMenu = [
+  {
+    type: "list",
+    name: "firstChoice",
+    message: "What would you like to do?",
+    choices: [
+      "Add Employee",
+      "Add Role",
+      "Add Department",
+      "View Employees",
+      "View Roles",
+      "View Departments",
+      "Update Employees",
+    ],
+  },
+];
+
+const updateQuestions = [
+  {
+    type: "list",
+    name: "updateEmployee",
+    message: "Which employee would you like to update?",
+    // TODO: Pull full employee list from SQL
+    choices: [],
+  },
+];
+
+// connect to the mysql server and sql database
+connection.connect(function (err) {
   if (err) throw err;
-  console.log("mysql connection successful");
+  // run the start function after the connection is made to prompt the user
   init();
 });
 
-// if response is addChoice run through function to add based on what they choose
+// Offer main menu then prompt next function based on response
 function init() {
-  inquirer.prompt(questions).then((response) => {
-    // console.log(response);
-    inquirer.prompt(addQuestions).then((response2) => {
-      // console.log(response2);
-      switch (response2.addChoice) {
-        case "employee":
-          employee();
-          break;
-        case "role":
-          role();
-          break;
-        case "department":
-          department();
-          break;
-        default:
-          init();
-      }
-    });
+  inquirer.prompt(mainMenu).then((response) => {
+    switch (response.firstChoice) {
+      case "Add Employee":
+        employee();
+        break;
+      case "Add Role":
+        role();
+        break;
+      case "Add Department":
+        department();
+        break;
+      case "View Employees":
+        viewEmployees();
+        break;
+      case "View Roles":
+        viewRole();
+        break;
+      case "View Departments":
+        viewDepartment();
+        break;
+      case "Update Employee":
+        console.log("todo");
+        break;
+    }
   });
 }
 // addChoice functions questions based on what they want to add
@@ -112,6 +122,7 @@ function employee() {
       init();
     });
 }
+
 function role() {
   inquirer
     .prompt([
@@ -148,6 +159,7 @@ function role() {
       init();
     });
 }
+
 function department() {
   inquirer
     .prompt([
@@ -189,6 +201,7 @@ function viewRole() {
   });
 }
 
+// TODO: Make join to show all 3 table information combined
 function viewEmployees() {
   connection.query("select * from employee", function (err, data) {
     if (err) throw err;

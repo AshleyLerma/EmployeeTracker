@@ -26,10 +26,10 @@ const mainMenu = [
       "Add Employee",
       "Add Role",
       "Add Department",
-      "View Employees",
-      "View Roles",
-      "View Departments",
-      "Update Employees",
+      "View All Employees",
+      "View All Employees By Role",
+      "View All Employees By Department",
+      "Update An Employee",
     ],
   },
 ];
@@ -64,17 +64,17 @@ function init() {
       case "Add Department":
         department();
         break;
-      case "View Employees":
+      case "View All Employees":
         viewEmployees();
         break;
-      case "View Roles":
+      case "View All Employees By Role":
         viewRole();
         break;
-      case "View Departments":
+      case "View All Employees By Department":
         viewDepartment();
         break;
-      case "Update Employee":
-        console.log("todo");
+      case "Update An Employee":
+        console.log("TBD");
         break;
     }
   });

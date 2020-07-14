@@ -43,7 +43,7 @@ const updateQuestions = [
     name: "updateEmployee",
     message: "Which employee would you like to update?",
     // TODO: Pull full employee list from SQL
-    choices: [],
+    choices: emplArr,
   },
 ];
 
@@ -78,14 +78,15 @@ function init() {
         viewDepartment();
         break;
       case "Update An Employee":
-        getDepts();
-        getRoles();
-        getEmployees();
+        console.log("tbd");
         break;
       default:
         connection.end();
     }
   });
+  getDepts();
+  getRoles();
+  getEmployees();
 }
 
 // get all Departments
@@ -119,7 +120,7 @@ function getEmployees() {
     function (err, employees) {
       if (err) throw err;
       for (i = 0; i < employees.length; i++) {
-        emplArr.push(employees[i]);
+        emplArr.push(employees[i].Name);
       }
       console.log(emplArr);
     }

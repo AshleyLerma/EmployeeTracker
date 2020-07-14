@@ -1,19 +1,19 @@
 USE employee_DB;
 
 -- Seeds for department
-INSERT INTO department (department_id , name)
+INSERT INTO department (department_id , department_name)
 VALUES (1, "Human Resources");
 
-INSERT INTO department (department_id , name)
+INSERT INTO department (department_id , department_name)
 VALUES (2, "Sales");
 
-INSERT INTO department (department_id , name)
+INSERT INTO department (department_id , department_name)
 VALUES (3, "Customer Experience");
 
-INSERT INTO department (department_id , name)
+INSERT INTO department (department_id , department_name)
 VALUES (4, "Marketing");
 
-INSERT INTO department (department_id , name)
+INSERT INTO department (department_id , department_name)
 VALUES (5, "IT");
 
 -- Seeds for role
@@ -53,7 +53,7 @@ INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
 VALUES (1, "Ashley", "Adams", 3, null);
 
 INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
-VALUES (2, "Becky", "Burns", 4, 1);
+VALUES (2, "Genny", "Gale", 2, null);
 
 INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
 VALUES (3, "Charlie", "Chest", 6, null);
@@ -62,19 +62,19 @@ INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
 VALUES (4, "Dustin", "Davenport", 10, null);
 
 INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
-VALUES (5, "Erin", "Eckhart", 8, 10);
+VALUES (5, "Jack", "Jones", 7, null);
 
 INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
-VALUES (6, "Frank", "Farmer", 1, 7);
+VALUES (6, "Becky", "Burns", 4, 1);
 
 INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
-VALUES (7, "Genny", "Gale", 2, null);
+VALUES (7, "Erin", "Eckhart", 8, 5);
 
 INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
-VALUES (8, "Harry", "Hart", 9, 4);
+VALUES (8, "Frank", "Farmer", 1, 2);
 
 INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
-VALUES (9, "Ivan", "Iles", 5, 3);
+VALUES (9, "Harry", "Hart", 9, 4);
 
 INSERT INTO employee (employee_id, first_name, last_name, role_id, manager_id)
-VALUES (10, "Jack", "Jones", 7, null);
+VALUES (10, "Ivan", "Iles", 5, 3);

@@ -20,7 +20,7 @@ var connection = mysql.createConnection({
 const mainMenu = [
   {
     type: "list",
-    name: "firstChoice",
+    name: "selection",
     message: "What would you like to do?",
     choices: [
       "Add Employee",
@@ -54,7 +54,7 @@ connection.connect(function (err) {
 // Offer main menu then prompt next function based on response
 function init() {
   inquirer.prompt(mainMenu).then((response) => {
-    switch (response.firstChoice) {
+    switch (response.selection) {
       case "Add Employee":
         employee();
         break;
@@ -180,7 +180,6 @@ function department() {
           if (err) throw err;
         }
       );
-      // viewDepartment();
       init();
     });
 }

@@ -159,7 +159,9 @@ function employee() {
         {
           first_name: answer.first_name,
           last_name: answer.last_name,
+          // TODO: Get role_id by title
           role_id: answer.role_id,
+          // TODO: Get manager_id by name
           manager_id: answer.manager_id,
         },
         function (err) {
@@ -186,8 +188,9 @@ function role() {
       },
       {
         name: "department_id",
-        type: "input",
-        message: "What is your department ID?",
+        type: "list",
+        message: "What is your department is this role in?",
+        choices: deptArr,
       },
     ])
     .then(function (answer) {
@@ -197,6 +200,7 @@ function role() {
         {
           title: answer.title,
           salary: answer.salary,
+          // TODO: Get department_id by department_name
           department_id: answer.department_id,
         },
         function (err) {

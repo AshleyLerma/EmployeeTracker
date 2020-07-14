@@ -79,8 +79,8 @@ function init() {
     }
   });
 }
-// addChoice functions questions based on what they want to add
 
+// Add Employee
 function employee() {
   inquirer
     .prompt([
@@ -122,7 +122,7 @@ function employee() {
       init();
     });
 }
-
+// Add Role
 function role() {
   inquirer
     .prompt([
@@ -159,7 +159,7 @@ function role() {
       init();
     });
 }
-
+// Add Department
 function department() {
   inquirer
     .prompt([
@@ -184,7 +184,7 @@ function department() {
       init();
     });
 }
-
+// View all employees by department
 function viewDepartment() {
   connection.query("select * from department", function (err, data) {
     if (err) throw err;
@@ -192,7 +192,7 @@ function viewDepartment() {
     // init();
   });
 }
-
+// View all employees by role
 function viewRole() {
   connection.query("select * from role", function (err, data) {
     if (err) throw err;
@@ -200,8 +200,7 @@ function viewRole() {
     // init();
   });
 }
-
-// TODO: Make join to show all 3 table information combined
+// View all employees
 function viewEmployees() {
   connection.query("select * from employee", function (err, data) {
     if (err) throw err;

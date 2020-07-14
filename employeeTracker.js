@@ -1,6 +1,9 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require("console.table");
+let deptArr = [];
+let roleArr = [];
+let emplArr = [];
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -30,23 +33,15 @@ const mainMenu = [
       "View All Employees By Role",
       "View All Employees By Department",
       "Update An Employee",
+      "Exit",
     ],
-  },
-];
-
-const updateQuestions = [
-  {
-    type: "list",
-    name: "updateEmployee",
-    message: "Which employee would you like to update?",
-    // TODO: Pull full employee list from SQL
-    choices: [],
   },
 ];
 
 // connect to the mysql server and sql database
 connection.connect(function (err) {
   if (err) throw err;
+  console.log("\n WELCOME TO EMPLOYEE TRACKER \n");
   // run the start function after the connection is made to prompt the user
   init();
 });
@@ -74,12 +69,60 @@ function init() {
         viewDepartment();
         break;
       case "Update An Employee":
-        console.log("TBD");
+        updateEmployee();
+        break;
+      case "Exit":
+        connection.end();
         break;
       default:
         connection.end();
     }
   });
+  // update arrays each time the init function is called
+  getDepts();
+  getRoles();
+  getEmployees();
+}
+
+// get all Departments
+function getDepts() {
+  connection.query(`SELECT department_name FROM department`, function (
+    err,
+    departments
+  ) {
+    if (err) throw err;
+    deptArr = [];
+    for (i = 0; i < departments.length; i++) {
+      deptArr.push(departments[i].department_name);
+    }
+    // console.log(deptArr);
+  });
+}
+
+// get all Roles
+function getRoles() {
+  connection.query(`SELECT title FROM role`, function (err, roles) {
+    if (err) throw err;
+    roleArr = [];
+    for (i = 0; i < roles.length; i++) {
+      roleArr.push(roles[i].title);
+    }
+    // console.log(roleArr);
+  });
+}
+
+function getEmployees() {
+  connection.query(
+    `SELECT concat(employee.first_name, ' ' ,  employee.last_name) AS Name FROM employee`,
+    function (err, employees) {
+      if (err) throw err;
+      emplArr = [];
+      for (i = 0; i < employees.length; i++) {
+        emplArr.push(employees[i].Name);
+      }
+      // console.log(emplArr);
+    }
+  );
 }
 
 // Add Employee
@@ -98,13 +141,15 @@ function employee() {
       },
       {
         name: "role_id",
-        type: "input",
-        message: "What is your role id?",
+        type: "list",
+        message: "What is the employee's role?",
+        choices: roleArr,
       },
       {
         name: "manager_id",
-        type: "input",
-        message: "What is your manager id?",
+        type: "list",
+        message: "Who is this employee's Manager?",
+        choices: emplArr,
       },
     ])
     .then(function (answer) {
@@ -114,7 +159,9 @@ function employee() {
         {
           first_name: answer.first_name,
           last_name: answer.last_name,
+          // TODO: Get role_id by title
           role_id: answer.role_id,
+          // TODO: Get manager_id by name
           manager_id: answer.manager_id,
         },
         function (err) {
@@ -141,8 +188,9 @@ function role() {
       },
       {
         name: "department_id",
-        type: "input",
-        message: "What is your department ID?",
+        type: "list",
+        message: "What is your department is this role in?",
+        choices: deptArr,
       },
     ])
     .then(function (answer) {
@@ -152,6 +200,7 @@ function role() {
         {
           title: answer.title,
           salary: answer.salary,
+          // TODO: Get department_id by department_name
           department_id: answer.department_id,
         },
         function (err) {
@@ -229,3 +278,30 @@ function viewEmployees() {
     }
   );
 }
+// function updateEmployee() {
+//   inquirer
+//     .prompt([
+//       {
+//         name: "employeeChoice",
+//         type: "list",
+//         message: "Which employee would you like to update?",
+//         choices: emplArr,
+//       },
+//     ])
+//     .then(function (answer) {
+//       // when finished prompting, insert a new item into the db with that info
+//       connection.query(
+//         "INSERT INTO employee SET ?",
+//         {
+//           first_name: answer.first_name,
+//           last_name: answer.last_name,
+//           role_id: answer.role_id,
+//           manager_id: answer.manager_id,
+//         },
+//         function (err) {
+//           if (err) throw err;
+//         }
+//       );
+//       init();
+//     });
+// }

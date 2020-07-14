@@ -99,7 +99,7 @@ function getDepts() {
     for (i = 0; i < departments.length; i++) {
       deptArr.push(departments[i].department_name);
     }
-    console.log(deptArr);
+    // console.log(deptArr);
   });
 }
 
@@ -110,7 +110,7 @@ function getRoles() {
     for (i = 0; i < roles.length; i++) {
       roleArr.push(roles[i].title);
     }
-    console.log(roleArr);
+    // console.log(roleArr);
   });
 }
 
@@ -122,7 +122,7 @@ function getEmployees() {
       for (i = 0; i < employees.length; i++) {
         emplArr.push(employees[i].Name);
       }
-      console.log(emplArr);
+      // console.log(emplArr);
     }
   );
 }

@@ -173,42 +173,51 @@ function employee() {
 }
 // Add Role
 function role() {
-  inquirer
-    .prompt([
-      {
-        name: "title",
-        type: "input",
-        message: "What is your role title?",
-      },
-      {
-        name: "salary",
-        type: "input",
-        message: "What is the salary for this role?",
-        default: "0.00",
-      },
-      {
-        name: "department_id",
-        type: "list",
-        message: "What is your department is this role in?",
-        choices: deptArr,
-      },
-    ])
-    .then(function (answer) {
-      // when finished prompting, insert a new item into the db with that info
-      connection.query(
-        "INSERT INTO role SET ?",
+  connection.query("SELECT * FROM department", function (err, res) {
+    if (err) throw err;
+    inquirer
+      .prompt([
         {
-          title: answer.title,
-          salary: answer.salary,
-          // TODO: Get department_id by department_name
-          department_id: answer.department_id,
+          name: "title",
+          type: "input",
+          message: "What is your role title?",
         },
-        function (err) {
-          if (err) throw err;
+        {
+          name: "salary",
+          type: "input",
+          message: "What is the salary for this role?",
+          default: "0.00",
+        },
+        {
+          name: "departmentName",
+          type: "list",
+          message: "What is your department is this role in?",
+          choices: deptArr,
+        },
+      ])
+      .then(function (answer) {
+        let deptID;
+        for (let d = 0; d < res.length; d++) {
+          if (res[d].department_name == answer.departmentName) {
+            deptID = res[d].department_id;
+          }
         }
-      );
-      init();
-    });
+        // when finished prompting, insert a new item into the db with that info
+        connection.query(
+          "INSERT INTO role SET ?",
+          {
+            title: answer.title,
+            salary: answer.salary,
+            // TODO: Get department_id by department_name
+            department_id: deptID,
+          },
+          function (err) {
+            if (err) throw err;
+          }
+        );
+        init();
+      });
+  });
 }
 // Add Department
 function department() {

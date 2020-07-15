@@ -92,7 +92,9 @@ function init() {
   getEmployees();
 }
 
-// get all Departments
+// Functions to update Employee, Department and Role arrays
+
+// Get All Departments
 function getDepts() {
   connection.query(`SELECT department_name FROM department`, function (
     err,
@@ -106,8 +108,7 @@ function getDepts() {
     // console.log(deptArr);
   });
 }
-
-// get all Roles
+// get All Roles
 function getRoles() {
   connection.query(`SELECT title FROM role`, function (err, roles) {
     if (err) throw err;
@@ -118,7 +119,7 @@ function getRoles() {
     // console.log(roleArr);
   });
 }
-
+// Get All Employees
 function getEmployees() {
   connection.query(
     `SELECT concat(employee.first_name, ' ' ,  employee.last_name) AS Name FROM employee`,
@@ -132,6 +133,8 @@ function getEmployees() {
     }
   );
 }
+
+// Functions to execute main menu selections
 
 // Add Employee
 function employee() {
@@ -204,6 +207,7 @@ function role() {
         },
       ])
       .then(function (answer) {
+        // set corresponding department ID to variable
         let deptID;
         for (let d = 0; d < res.length; d++) {
           if (res[d].department_name == answer.departmentName) {
@@ -216,7 +220,6 @@ function role() {
           {
             title: answer.title,
             salary: answer.salary,
-            // TODO: Get department_id by department_name
             department_id: deptID,
           },
           function (err) {

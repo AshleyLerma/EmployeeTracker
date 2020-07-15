@@ -262,7 +262,7 @@ function department() {
       connection.query(
         "INSERT INTO department SET ?",
         {
-          name: answer.department,
+          department_name: answer.department,
         },
         function (err) {
           if (err) throw err;

@@ -237,10 +237,10 @@ function department() {
 // View all employees by department
 function viewDepartment() {
   connection.query(
-    ` \n SELECT employee.employee_id, employee.first_name, employee.last_name, department.department_name FROM employee 
+    `SELECT employee.employee_id, employee.first_name, employee.last_name, department.department_name FROM employee 
   LEFT JOIN role ON employee.role_id = role.role_id
   LEFT JOIN department ON role.department_id = department.department_id 
-  ORDER BY department.department_name \n `,
+  ORDER BY department.department_name`,
     function (err, data) {
       if (err) throw err;
       console.table(data);
@@ -251,10 +251,10 @@ function viewDepartment() {
 // View all employees by role
 function viewRole() {
   connection.query(
-    ` \n SELECT employee.employee_id, employee.first_name, employee.last_name, role.title, role.salary, department.department_name FROM employee 
+    `SELECT employee.employee_id, employee.first_name, employee.last_name, role.title, role.salary, department.department_name FROM employee 
     LEFT JOIN role ON employee.role_id = role.role_id
     LEFT JOIN department ON role.department_id = department.department_id 
-    ORDER BY role.title \n `,
+    ORDER BY role.title`,
     function (err, data) {
       if (err) throw err;
       console.table(data);
@@ -265,12 +265,12 @@ function viewRole() {
 // View all employees
 function viewEmployees() {
   connection.query(
-    ` \n SELECT employee.employee_id, employee.first_name, employee.last_name, role.title,
+    `SELECT employee.employee_id, employee.first_name, employee.last_name, role.title,
   department.department_name AS department,role.salary,CONCAT(a.first_name, " ", a.last_name) AS manager
   FROM employee
   LEFT JOIN role ON employee.role_id = role.role_id
   LEFT JOIN department ON role.department_id = department.department_id
-  LEFT JOIN employee a ON a.employee_id = employee.manager_id \n `,
+  LEFT JOIN employee a ON a.employee_id = employee.manager_id`,
     function (err, data) {
       if (err) throw err;
       console.table(data);

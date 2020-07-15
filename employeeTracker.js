@@ -32,6 +32,8 @@ const mainMenu = [
       "View All Employees",
       "View All Employees By Role",
       "View All Employees By Department",
+      "View All Roles",
+      "View All Departments",
       "Update An Employee",
       "Exit",
     ],
@@ -63,9 +65,15 @@ function init() {
         viewEmployees();
         break;
       case "View All Employees By Role":
-        viewRole();
+        viewByRole();
         break;
       case "View All Employees By Department":
+        viewByDepartment();
+        break;
+      case "View All Roles":
+        viewDepartment();
+        break;
+      case "View All Departments":
         viewDepartment();
         break;
       case "Update An Employee":
@@ -244,7 +252,7 @@ function department() {
     });
 }
 // View all employees by department
-function viewDepartment() {
+function viewByDepartment() {
   connection.query(
     `SELECT employee.employee_id, employee.first_name, employee.last_name, department.department_name FROM employee 
   LEFT JOIN role ON employee.role_id = role.role_id
@@ -258,7 +266,7 @@ function viewDepartment() {
   );
 }
 // View all employees by role
-function viewRole() {
+function viewByRole() {
   connection.query(
     `SELECT employee.employee_id, employee.first_name, employee.last_name, role.title, role.salary, department.department_name FROM employee 
     LEFT JOIN role ON employee.role_id = role.role_id

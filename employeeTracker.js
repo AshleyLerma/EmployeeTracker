@@ -154,9 +154,9 @@ function getManagers() {
 
 // Add Employee
 function employee() {
-  connection.query("SELECT * FROM employee", function (err, res) {
+  connection.query("SELECT * FROM role", function (err, res) {
     if (err) throw err;
-    connection.query("SELECT * FROM role", function (err, res) {
+    connection.query("SELECT * FROM employee", function (err, res2) {
       if (err) throw err;
       inquirer
         .prompt([
@@ -191,9 +191,9 @@ function employee() {
             }
           }
           let managerID;
-          for (let m = 0; m < res.length; m++) {
-            if (res[m].last_name == answer.managerName) {
-              managerID = res[m].employee_id;
+          for (let m = 0; m < res2.length; m++) {
+            if (res2[m].last_name == answer.managerName) {
+              managerID = res2[m].employee_id;
             }
           }
           // when finished prompting, insert a new item into the db with that info

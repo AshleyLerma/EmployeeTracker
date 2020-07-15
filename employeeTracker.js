@@ -4,6 +4,7 @@ const cTable = require("console.table");
 let deptArr = [];
 let roleArr = [];
 let emplArr = [];
+let managerArr = [];
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -90,6 +91,7 @@ function init() {
   getDepts();
   getRoles();
   getEmployees();
+  getManagers();
 }
 
 // Functions to update Employee, Department and Role arrays
@@ -134,53 +136,84 @@ function getEmployees() {
   );
 }
 
+function getManagers() {
+  connection.query(`SELECT employee.last_name FROM employee`, function (
+    err,
+    managers
+  ) {
+    if (err) throw err;
+    emplArr = [];
+    for (i = 0; i < managers.length; i++) {
+      managerArr.push(managers[i].last_name);
+    }
+    // console.log(managerArr);
+  });
+}
+
 // Functions to execute main menu selections
 
 // Add Employee
 function employee() {
-  inquirer
-    .prompt([
-      {
-        name: "first_name",
-        type: "input",
-        message: "What is the employee's first name?",
-      },
-      {
-        name: "last_name",
-        type: "input",
-        message: "What is the employee's last name?",
-      },
-      {
-        name: "role_id",
-        type: "list",
-        message: "What is the employee's role?",
-        choices: roleArr,
-      },
-      {
-        name: "manager_id",
-        type: "list",
-        message: "Who is this employee's Manager?",
-        choices: emplArr,
-      },
-    ])
-    .then(function (answer) {
-      // when finished prompting, insert a new item into the db with that info
-      connection.query(
-        "INSERT INTO employee SET ?",
-        {
-          first_name: answer.first_name,
-          last_name: answer.last_name,
-          // TODO: Get role_id by title
-          role_id: answer.role_id,
-          // TODO: Get manager_id by name
-          manager_id: answer.manager_id,
-        },
-        function (err) {
-          if (err) throw err;
-        }
-      );
-      init();
+  connection.query("SELECT * FROM employee", function (err, res) {
+    if (err) throw err;
+    connection.query("SELECT * FROM role", function (err, res) {
+      if (err) throw err;
+      inquirer
+        .prompt([
+          {
+            name: "first_name",
+            type: "input",
+            message: "What is the employee's first name?",
+          },
+          {
+            name: "last_name",
+            type: "input",
+            message: "What is the employee's last name?",
+          },
+          {
+            name: "roleName",
+            type: "list",
+            message: "What is the employee's role?",
+            choices: roleArr,
+          },
+          {
+            name: "managerName",
+            type: "list",
+            message: "Who is this employee's Manager?",
+            choices: managerArr,
+          },
+        ])
+        .then(function (answer) {
+          let roleID;
+          for (let r = 0; r < res.length; r++) {
+            if (res[r].title == answer.roleName) {
+              roleID = res[r].role_id;
+            }
+          }
+          let managerID;
+          for (let m = 0; m < res.length; m++) {
+            if (res[m].last_name == answer.managerName) {
+              managerID = res[m].employee_id;
+            }
+          }
+          // when finished prompting, insert a new item into the db with that info
+          connection.query(
+            "INSERT INTO employee SET ?",
+            {
+              first_name: answer.first_name,
+              last_name: answer.last_name,
+              role_id: roleID,
+              // TODO: Get manager_id by name
+              manager_id: managerID,
+            },
+            function (err) {
+              if (err) throw err;
+            }
+          );
+          init();
+        });
     });
+  });
 }
 // Add Role
 function role() {

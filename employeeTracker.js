@@ -71,10 +71,10 @@ function init() {
         viewByDepartment();
         break;
       case "View All Roles":
-        viewDepartment();
+        viewRoles();
         break;
       case "View All Departments":
-        viewDepartment();
+        viewDepartments();
         break;
       case "Update An Employee":
         updateEmployee();
@@ -278,6 +278,22 @@ function viewByRole() {
       init();
     }
   );
+}
+// View all roles
+function viewRoles() {
+  connection.query(`SELECT * FROM role`, function (err, data) {
+    if (err) throw err;
+    console.table(data);
+    init();
+  });
+}
+// View all departments
+function viewDepartments() {
+  connection.query(`SELECT * FROM department`, function (err, data) {
+    if (err) throw err;
+    console.table(data);
+    init();
+  });
 }
 // View all employees
 function viewEmployees() {

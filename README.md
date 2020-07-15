@@ -4,6 +4,8 @@ Developers are often tasked with creating interfaces that make it easy for non-d
 
 See it in action below:
 
+![Gif of tracker in action](gif/empTrackerGif.gif)
+
 ## Usage
 
 ```

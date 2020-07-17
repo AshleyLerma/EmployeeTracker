@@ -102,6 +102,7 @@ function getDepts() {
     departments
   ) {
     if (err) throw err;
+    // Empty departments array then add all depts to it
     deptArr = [];
     for (i = 0; i < departments.length; i++) {
       deptArr.push(departments[i].department_name);
@@ -113,11 +114,11 @@ function getDepts() {
 function getRoles() {
   connection.query(`SELECT title FROM role`, function (err, roles) {
     if (err) throw err;
+    // Empty role array then add all roles to it
     roleArr = [];
     for (i = 0; i < roles.length; i++) {
       roleArr.push(roles[i].title);
     }
-    // console.log(roleArr);
   });
 }
 // Get all potential managers by last name
@@ -127,21 +128,21 @@ function getManagers() {
     managers
   ) {
     if (err) throw err;
-    emplArr = [];
+    // Empty manager array then add all employees to it
+    managerArr = [];
     for (i = 0; i < managers.length; i++) {
       managerArr.push(managers[i].last_name);
     }
-    // console.log(managerArr);
   });
 }
 
 // Functions to execute main menu selections
 
-// Add Employee
+// Add employee role
 function employee() {
   connection.query("SELECT * FROM role", function (err, res) {
     if (err) throw err;
-    connection.query("SELECT * FROM employee", function (err, res2) {
+    connection.query("SELECT * FROM employee", function (err, allRoles) {
       if (err) throw err;
       inquirer
         .prompt([
@@ -176,9 +177,9 @@ function employee() {
             }
           }
           let managerID;
-          for (let m = 0; m < res2.length; m++) {
-            if (res2[m].last_name == answer.managerName) {
-              managerID = res2[m].employee_id;
+          for (let m = 0; m < allRoles.length; m++) {
+            if (allRoles[m].last_name == answer.managerName) {
+              managerID = allRoles[m].employee_id;
             }
           }
           // when finished prompting, insert a new item into the db with that info
@@ -337,11 +338,12 @@ function updateEmployee() {
     `SELECT concat(employee.first_name, ' ' ,  employee.last_name) AS Name FROM employee`,
     function (err, employees) {
       if (err) throw err;
-      emplArr = [];
+      // create array of all employees full names
+      let emplArr = [];
       for (i = 0; i < employees.length; i++) {
         emplArr.push(employees[i].Name);
       }
-      connection.query("SELECT * FROM role", function (err, res2) {
+      connection.query("SELECT * FROM role", function (err, allRoles) {
         if (err) throw err;
         inquirer
           .prompt([
@@ -360,9 +362,9 @@ function updateEmployee() {
           ])
           .then(function (answer) {
             let roleID;
-            for (let r = 0; r < res2.length; r++) {
-              if (res2[r].title == answer.roleChoice) {
-                roleID = res2[r].role_id;
+            for (let r = 0; r < allRoles.length; r++) {
+              if (allRoles[r].title == answer.roleChoice) {
+                roleID = allRoles[r].role_id;
               }
             }
             // when finished prompting, update the db with that info
